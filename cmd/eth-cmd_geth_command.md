@@ -266,15 +266,163 @@
 
 * __makecache__
 
+```
+   function:生成ethhash验证缓存(测试使用)
+   args:<blockNum> <outputDir>
+   demo:makecache 0 /home/yujian/
+   notice:
+   success_result_demo:
+     在对应的输出目录，将会生成一个cache文件,如 cache-R23-0000000000000000
+```
+
+
 * __makedag__
+
+```
+   function:生成ethhash mining dag(测试使用)
+   args:<blockNum> <outputDir>
+   demo:makedag 0 /home/yujian/
+   notice:
+   success_result_demo:
+     INFO [01-16|17:50:36] Generating DAG in progress               epoch=0 percentage=92 elapsed=3m2.525s
+     INFO [01-16|17:50:38] Generating DAG in progress               epoch=0 percentage=93 elapsed=3m4.338s
+     INFO [01-16|17:50:40] Generating DAG in progress               epoch=0 percentage=94 elapsed=3m6.058s
+     INFO [01-16|17:50:41] Generating DAG in progress               epoch=0 percentage=95 elapsed=3m7.795s
+     INFO [01-16|17:50:43] Generating DAG in progress               epoch=0 percentage=96 elapsed=3m9.542s
+     INFO [01-16|17:50:45] Generating DAG in progress               epoch=0 percentage=97 elapsed=3m11.380s
+     INFO [01-16|17:50:47] Generating DAG in progress               epoch=0 percentage=98 elapsed=3m13.129s
+     INFO [01-16|17:50:49] Generating DAG in progress               epoch=0 percentage=99 elapsed=3m15.303s
+     INFO [01-16|17:50:49] Generated ethash verification cache      epoch=0 elapsed=3m15.306s
+
+     Process finished with exit code 0
+
+     在对应的输出目录,将会生成一个full文件,如 full-R23-0000000000000000
+
+
+```
 
 * __version__
 
+```
+   function:打印版本数据
+   args:""
+   demo:version
+   notice:
+   success_result_demo:
+     Geth
+     Version: 1.7.3-unstable
+     Architecture: amd64
+     Protocol Versions: [63 62]
+     Network Id: 1
+     Go Version: go1.9.2
+     Operating System: linux
+     GOPATH=/home/yujian/blockchain-workspace/go-project
+     GOROOT=/usr/local/go
+   　　
+```
+
 * __bug__
+
+```
+  function:打开一个窗口,直接跳转到ethereum的github仓库的issue
+  args:""
+  demo:bug
+  notice:
+  success_result_demo:
+  　　运行后会自动打开浏览器，跳转到ethereum的issue编辑页面　
+
+
+```
 
 * __license__
 
+```
+   function:显示geth的license信息
+   args:""
+   demo:license
+   notice:
+   success_result_demo:
+      Geth is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+
+      Geth is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+      GNU General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with geth. If not, see <http://www.gnu.org/licenses/>.
+```
+
 * __dumpconfig__
+
+```
+  function:显示配置信息
+  args:""
+  demo:dumpconfig
+  notice:
+  success_result_demo:
+  　[Eth]
+    NetworkId = 1
+    SyncMode = "fast"
+    LightPeers = 20
+    DatabaseCache = 128
+    Etherbase = "0x2a23e9223d7af9c56f5abd0c8226021b51c98cbc"
+    GasPrice = 18000000000
+    EthashCacheDir = "ethash"
+    EthashCachesInMem = 2
+    EthashCachesOnDisk = 3
+    EthashDatasetDir = "/home/yujian/.ethash"
+    EthashDatasetsInMem = 1
+    EthashDatasetsOnDisk = 2
+    EnablePreimageRecording = false
+
+    [Eth.TxPool]
+    NoLocals = false
+    Journal = "transactions.rlp"
+    Rejournal = 3600000000000
+    PriceLimit = 1
+    PriceBump = 10
+    AccountSlots = 16
+    GlobalSlots = 4096
+    AccountQueue = 64
+    GlobalQueue = 1024
+    Lifetime = 10800000000000
+
+    [Eth.GPO]
+    Blocks = 10
+    Percentile = 50
+
+    [Shh]
+    MaxMessageSize = 1048576
+    MinimumAcceptedPOW = 2e-01
+
+    [Node]
+    DataDir = "/home/yujian/.ethereum"
+    IPCPath = "geth.ipc"
+    HTTPPort = 8545
+    HTTPModules = ["net", "web3", "eth", "shh"]
+    WSPort = 8546
+    WSModules = ["net", "web3", "eth", "shh"]
+
+    [Node.P2P]
+    MaxPeers = 25
+    NoDiscovery = false
+    DiscoveryV5Addr = ":30304"
+    BootstrapNodes = ["enode://a979fb575495b8d6db44f750317d0f4622bf4c2aa3365d6af7c284339968eef29b69ad0dce72a4d8db5ebb4968de0e3bec910127f134779fbcb0cb6d3331163c@52.16.188.185:30303", "enode://3f1d12044546b76342d59d4a05532c14b85aa669704bfe1f864fe079415aa2c02d743e03218e57a33fb94523adb54032871a6c51b2cc5514cb7c7e35b3ed0a99@13.93.211.84:30303", "enode://78de8a0916848093c73790ead81d1928bec737d565119932b98c6b100d944b7a95e94f847f689fc723399d2e31129d182f7ef3863f2b4c820abbf3ab2722344d@191.235.84.50:30303", "enode://158f8aab45f6d19c6cbf4a089c2670541a8da11978a2f90dbf6a502a4a3bab80d288afdbeb7ec0ef6d92de563767f3b1ea9e8e334ca711e9f8e2df5a0385e8e6@13.75.154.138:30303", "enode://1118980bf48b0a3640bdba04e0fe78b1add18e1cd99bf22d53daac1fd9972ad650df52176e7c7d89d1114cfef2bc23a2959aa54998a46afcf7d91809f0855082@52.74.57.123:30303", "enode://979b7fa28feeb35a4741660a16076f1943202cb72b6af70d327f053e248bab9ba81760f39d0701ef1d8f89cc1fbd2cacba0710a12cd5314d5e0c9021aa3637f9@5.1.83.226:30303"]
+    BootstrapNodesV5 = ["enode://0cc5f5ffb5d9098c8b8c62325f3797f56509bff942704687b6530992ac706e2cb946b90a34f1f19548cd3c7baccbcaea354531e5983c7d1bc0dee16ce4b6440b@40.118.3.223:30305", "enode://1c7a64d76c0334b0418c004af2f67c50e36a3be60b5e4790bdac0439d21603469a85fad36f2473c9a80eb043ae60936df905fa28f1ff614c3e5dc34f15dcd2dc@40.118.3.223:30308", "enode://85c85d7143ae8bb96924f2b54f1b3e70d8c4d367af305325d30a61385a432f247d2c75c45c6b4a60335060d072d7f5b35dd1d4c45f76941f62a4f83b6e75daaf@40.118.3.223:30309"]
+    StaticNodes = []
+    TrustedNodes = []
+    ListenAddr = ":30303"
+    EnableMsgEvents = false
+
+    [Dashboard]
+    Host = "localhost"
+    Port = 8080
+    Refresh = 3000000000　
+```
 
 
 ##### 参考资料
