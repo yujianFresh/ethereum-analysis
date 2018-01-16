@@ -1,0 +1,41 @@
+这是一个交互式的 JavaScript 执行环境，在这里面可以执行 JavaScript 代码，其中 > 是命令提示符。在这个环境里也内置了一些用来操作以太坊的 JavaScript 对象，可以直接使用这些对象。这些对象主要包括：
+
+eth：包含一些跟操作区块链相关的方法；
+net：包含一些查看p2p网络状态的方法；
+admin：包含一些与管理节点相关的方法；
+miner：包含启动&停止挖矿的一些方法；
+personal：主要包含一些管理账户的方法；
+txpool：包含一些查看交易内存池的方法；
+web3：包含了以上对象，还包含一些单位换算的方法。
+
+
+
+personal.newAccount('liyuechun')
+personal.listAccounts 
+account1 = web3.eth.coinbase
+web3.eth.getBalance(account1)
+
+发送交易：
+eth.sendTransaction({from:"0x1c0f18be339b56073e5d18b479bbc43b0ad5349c", to:"0x13d0dc1c592570f48360d7b779202d8df404563e", value: web3.toWei(0.05, "ether")})
+
+#增加节点
+admin.addPeers("..")
+#查看当前链连接信息
+admin.nodeInfo.enode
+#查看连接了几个节点
+web3.net.peerCount
+
+net.listening
+
+#查看连接了几个节点
+net.peerCount
+
+#连接对应workid链的控制台
+--networkid=1114 console
+
+初始化创世块
+init /home/yujian/eth-go/genesis.json --datadir /home/yujian/eth-go
+根据创世块启动，并且开启控制台
+--datadir /home/yujian/eth-go --networkid 1114 --port 30304 console 2>>/home/yujian/eth-go/myEth2.log
+
+
