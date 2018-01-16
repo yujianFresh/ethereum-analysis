@@ -10,8 +10,8 @@
   }
 ```
  
-  
-首先会通过账户管理系统（account manager）来获取Keystore，然后通过椭圆加密算法产生公私钥对，并获取地址
+  
+创建账户过程中，首先会通过账户管理系统（account manager）来获取Keystore，然后通过椭圆加密算法产生公私钥对，并获取地址
   
   ```
   func newKey(rand io.Reader) (*Key, error) {
