@@ -1,13 +1,15 @@
 ## 1.personal.newAccount方法
 用户在控制台输入personal.newAccount会创建一个新的账户，会进入到ethapi.api中的newAccount方法中，这个方法会返回一个地址。
-
-  func (s *PrivateAccountAPI) NewAccount(password string) (common.Address, error) {
+```
+ func (s *PrivateAccountAPI) NewAccount(password string) (common.Address, error) {
     acc, err := fetchKeystore(s.am).NewAccount(password)
     if err == nil {
       return acc.Address, nil
     }
     return common.Address{}, err
   }
+```
+ 
   
 首先会通过账户管理系统（account manager）来获取Keystore，然后通过椭圆加密算法产生公私钥对，并获取地址
   
