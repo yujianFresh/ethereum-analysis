@@ -1,8 +1,8 @@
 ### cmd包下的geth子包主函数启动的各个子命令解析
 
-/geth
+#### /geth
 
-* init
+* __init__
 ```
   function:导入创世块的json,以指定的json作为创世块
   args:<genesisPath>
@@ -18,7 +18,7 @@
     INFO [01-16|10:25:12] Successfully wrote genesis state         database=lightchaindata                             hash=bf2891…ad1419
 ```
 
-* import
+* __import__
 ```
   function:导入区块数据到当前运行的链中
   args:<filename> (<filename 2> ... <filename N>)
@@ -59,7 +59,7 @@
        1   |          1 |       0.00053 |       0.00435 |       0.00114 |       0.00053
 ```
 
-* export
+* __export__
 ```
   function:导出区块数据到指定的文件
   args:<filename> [<blockNumFirst> <blockNumLast>]
@@ -79,33 +79,33 @@
 ```
 
 
-* copydb
+* __copydb__
 
-* removedb
+* __removedb__
 
-* dump
+* __dump__
 
-* monitor
+* __monitor__
 
-* account
+* __account__
 
-* wallet
+* __wallet__
 
-* console
+* __console__
 
-* attach
+* __attach__
 
-* js
+* __js__
 
-* makecache
+* __makecache__
 
-* makedag
+* __makedag__
 
-* version
+* __version__
 
-* bug
+* __bug__
 
-* license
+* __license__
 
-* dumpconfig
+* __dumpconfig__
 
