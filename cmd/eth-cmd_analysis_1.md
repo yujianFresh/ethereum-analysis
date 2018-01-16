@@ -3,7 +3,41 @@
 
 ##### geth包下面的：
 
-![image.png](http://upload-images.jianshu.io/upload_images/6781661-31d5690c87a958d2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+```
+func init() {
+	// Initialize the CLI app and start Geth
+	app.Action = geth
+	app.HideVersion = true // we have a command to print the version
+	app.Copyright = "Copyright 2013-2017 The go-ethereum Authors"
+	app.Commands = []cli.Command{
+		// See chaincmd.go:
+		initCommand,
+		importCommand,
+		exportCommand,
+		copydbCommand,
+		removedbCommand,
+		dumpCommand,
+		// See monitorcmd.go:
+		monitorCommand,
+		// See accountcmd.go:
+		accountCommand,
+		walletCommand,
+		// See consolecmd.go:
+		consoleCommand,
+		attachCommand,
+		javascriptCommand,
+		// See misccmd.go:
+		makecacheCommand,
+		makedagCommand,
+		versionCommand,
+		bugCommand,
+		licenseCommand,
+		// See config.go
+		dumpConfigCommand,
+	}
+	sort.Sort(cli.CommandsByName(app.Commands))
+}
+```
 
 
 ###### 再单独分析initCommand:
