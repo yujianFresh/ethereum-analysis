@@ -80,8 +80,45 @@
 
 
 * __copydb__
+```
+  function:从存在的链数据文件夹中创建一条本地链
+  args:<sourceChaindataDir>
+  demo: copydb /home/yujian/eth-block.txt
+  notice:
+  success_result_demo:
+    WARN [01-16|11:35:55] No etherbase set and no accounts found as default
+    INFO [01-16|11:35:55] Allocated cache and file handles         database=/home/yujian/.ethereum/geth/chaindata cache=128 handles=1024
+    INFO [01-16|11:35:55] Disk storage enabled for ethash caches   dir=/home/yujian/.ethereum/geth/ethash count=3
+    INFO [01-16|11:35:55] Disk storage enabled for ethash DAGs     dir=/home/yujian/.ethash               count=2
+    INFO [01-16|11:35:55] Loaded most recent local header          number=0 hash=bf2891…ad1419 td=33554432
+    INFO [01-16|11:35:55] Loaded most recent local full block      number=0 hash=bf2891…ad1419 td=33554432
+    INFO [01-16|11:35:55] Loaded most recent local fast block      number=0 hash=bf2891…ad1419 td=33554432
+    INFO [01-16|11:35:55] Allocated cache and file handles         database=/home/yujian/eth-go/geth/chaindata    cache=128 handles=256
+    INFO [01-16|11:35:55] Block synchronisation started
+    INFO [01-16|11:35:55] Imported new state entries               count=1 elapsed=33.277µs processed=1 pending=0 retry=0 duplicate=0 unexpected=0
+    INFO [01-16|11:35:56] Imported new block headers               count=11 elapsed=1.276s   number=11 hash=ec3374…59a2ba ignored=0
+    Database copy done in 1.280940454s
+    Compacting entire database...
+    INFO [01-16|11:35:56] Imported new chain segment               blocks=11 txs=0 mgas=0.000 elapsed=1.961ms  mgasps=0.000 number=11 hash=ec3374…59a2ba
+    Compaction done in 11.130389ms.
+```
 
 * __removedb__
+```
+   function:移除当前链的数据库
+   args:""
+   demo: removedb
+   notice:默认当前链的数据在home目录下的.ethereum目录下
+   success_result_demo:
+     WARN [01-16|11:48:09] No etherbase set and no accounts found as default
+     /home/yujian/.ethereum/geth/chaindata
+     Remove this database? [y/N] y
+     /home/yujian/.ethereum/geth/lightchaindata
+     INFO [01-16|11:48:19] Database successfully deleted            database=chaindata elapsed=7.832ms
+     Remove this database? [y/N] y
+     INFO [01-16|11:48:27] Database successfully deleted            database=lightchaindata elapsed=481.229µs
+```
+
 
 * __dump__
 
