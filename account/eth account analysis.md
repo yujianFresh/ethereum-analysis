@@ -13,6 +13,7 @@
   
 首先会通过账户管理系统（account manager）来获取Keystore，然后通过椭圆加密算法产生公私钥对，并获取地址
   
+  ```
   func newKey(rand io.Reader) (*Key, error) {
     privateKeyECDSA, err := ecdsa.GenerateKey(crypto.S256(), rand)
     if err != nil {
@@ -20,8 +21,10 @@
     }
     return newKeyFromECDSA(privateKeyECDSA), nil
   }
+  ```
   
 在获取到公私钥对后，会对用户输入的密码进行加密，并保存入文件。
+```
 
   func (ks keyStorePassphrase) StoreKey(filename string, key *Key, auth string) error {
     keyjson, err := EncryptKey(key, auth, ks.scryptN, ks.scryptP)
@@ -30,8 +33,10 @@
     }
     return writeKeyFile(filename, keyjson)
   }
+  ```
   
 在保存文件的同时，会将新创建的账户加入到缓存中。
+```
 
   func (ks *KeyStore) NewAccount(passphrase string) (accounts.Account, error) {
     _, account, err := storeNewKey(ks.storage, crand.Reader, passphrase)
@@ -44,3 +49,4 @@
     ks.refreshWallets()
     return account, nil
   }
+  ```
