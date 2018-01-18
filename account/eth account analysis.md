@@ -97,7 +97,7 @@
         tx := args.toTransaction()
         ...
 ```
- 这个方法利用传入的参数from构造一个account，表示转出方。接着会通过账户管理系统accountManager获得该账户的钱包（wallet）。
+ 这个方法利用传入的参数from构造一个account，表示转出方。接着会通过账户管理系统accountManager获得该账户的钱包（wallet）。<br>
  am.Find方法会从账户管理系统中对钱包进行遍历，找到包含这个account的钱包。
  ```
      // Find attempts to locate the wallet corresponding to a specific account. Since
@@ -115,7 +115,7 @@
         return nil, ErrUnknownAccount
      }
  ```
- 接下来会调用setDefaults方法设置一些交易的默认值。如果没有设置Gas，GasPrice，Nonce等，那么它们将会被设置为默认值。
+ 接下来会调用setDefaults方法设置一些交易的默认值。如果没有设置Gas，GasPrice，Nonce等，那么它们将会被设置为默认值。<br>
  当交易的这些参数都设置好之后，会利用toTransaction方法创建一笔交易。
  ```
      func (args *SendTxArgs) toTransaction() *types.Transaction {
@@ -158,7 +158,7 @@
         return &Transaction{data: d}
     }
 ```
-这里就是填充了交易结构体中的一些参数，来创建一个交易。到这里，我们的交易就已经创建成功了。
+这里就是填充了交易结构体中的一些参数，来创建一个交易。到这里，我们的交易就已经创建成功了。<br>
 回到sendTransaction方法中，此时我们已经创建好了一笔交易，接着我们获取区块链的配置信息，检查是否是EIP155的配置，并获取链ID。
 ```
     ...
@@ -204,8 +204,8 @@
         return tx.WithSignature(s, sig)
     }
 ```
-在签名时，首先获取交易的RLP哈希值，然后用传入的私钥进行椭圆加密。接着调用WithSignature方法进行初始化。
-进行到这里，我们交易的签名已经完成，并且封装成为一个带签名的交易。
+在签名时，首先获取交易的RLP哈希值，然后用传入的私钥进行椭圆加密。接着调用WithSignature方法进行初始化。<br>
+进行到这里，我们交易的签名已经完成，并且封装成为一个带签名的交易。<br>
 然后，我们就需要将这笔交易提交出去。调用SubmitTransaction方法提交交易。
 ```
 // submitTransaction is a helper function that submits tx to txPool and logs a message.
@@ -227,7 +227,7 @@
         return tx.Hash(), nil
     }
 ```
-submitTransaction方法会将交易发送给backend进行处理，返回经过签名后的交易的hash值。这里主要是SendTx方法对交易进行处理。
+submitTransaction方法会将交易发送给backend进行处理，返回经过签名后的交易的hash值。这里主要是SendTx方法对交易进行处理。<br>
 sendTx方法会将参数转给txpool的Addlocal方法进行处理，而AddLocal方法会将该笔交易放入到交易池中进行等待。这里我们看将交易放入到交易池中的方法。
 ```
     // addTx enqueues a single transaction into the pool if it is valid.
@@ -248,7 +248,7 @@ sendTx方法会将参数转给txpool的Addlocal方法进行处理，而AddLocal�
         return nil
     }
 ```
-这里一共有两部操作，第一步操作是调用add方法将交易放入到交易池中，第二步是判断replace参数。如果该笔交易合法并且交易原来不存在在交易池中，则执行promoteExecutables方法，将可处理的交易变为待处理（pending）。
+这里一共有两部操作，第一步操作是调用add方法将交易放入到交易池中，第二步是判断replace参数。如果该笔交易合法并且交易原来不存在在交易池中，则执行promoteExecutables方法，将可处理的交易变为待处理（pending）。<br>
 首先看第一步add方法。
 ```
 // add validates a transaction and inserts it into the non-executable queue for
@@ -329,15 +329,15 @@ sendTx方法会将参数转给txpool的Addlocal方法进行处理，而AddLocal�
         return replace, nil
     }
 ```
-这个方法主要执行以下操作：
-    1.检查交易池是否含有这笔交易，如果有这笔交易，则异常退出。
-    2.调用validateTx方法对交易的合法性进行验证。如果是非法的交易，则异常退出。
+这个方法主要执行以下操作：<br>
+    1.检查交易池是否含有这笔交易，如果有这笔交易，则异常退出。<br>
+    2.调用validateTx方法对交易的合法性进行验证。如果是非法的交易，则异常退出。<br>
     3.接下来判断交易池是否超过容量。<br>
-        <1>如果超过容量，并且该笔交易的费用低于当前交易池中列表的最小值，则拒绝这一笔交易。
-        <2>如果超过容量，并且该笔交易的费用比当前交易池中列表最小值高，那么从交易池中移除交易费用最低的交易，为当前这一笔交易留出空间。
-    4.接着继续调用Overlaps方法检查该笔交易的Nonce值，确认该用户下的交易是否存在该笔交易。
-        <1>如果已经存在这笔交易，则删除之前的交易，并将该笔交易放入交易池中，然后返回。
-        <2>如果不存在，则调用enqueueTx将该笔交易放入交易池中。如果交易是本地发出的，则将发送者保存在交易池的local中。
+        <1>如果超过容量，并且该笔交易的费用低于当前交易池中列表的最小值，则拒绝这一笔交易。<br>
+        <2>如果超过容量，并且该笔交易的费用比当前交易池中列表最小值高，那么从交易池中移除交易费用最低的交易，为当前这一笔交易留出空间。<br>
+    4.接着继续调用Overlaps方法检查该笔交易的Nonce值，确认该用户下的交易是否存在该笔交易。<br>
+        <1>如果已经存在这笔交易，则删除之前的交易，并将该笔交易放入交易池中，然后返回。<br>
+        <2>如果不存在，则调用enqueueTx将该笔交易放入交易池中。如果交易是本地发出的，则将发送者保存在交易池的local中。<br>
 接下来看看validateTx方法会怎样验证交易的合法性。
 ```
 // validateTx checks whether a transaction is valid according to the consensus
@@ -385,17 +385,17 @@ sendTx方法会将参数转给txpool的Addlocal方法进行处理，而AddLocal�
         return nil
     }
 ```
-validateTx会验证一笔交易的以下几个特性：
-    1.首先验证这笔交易的大小，如果大于32kb则拒绝这笔交易，这样主要是为了防止DDOS攻击。
-    2.接着验证转账金额。如果金额小于0则拒绝这笔交易。
-    3.这笔交易的gas不能超过交易池的gas上限。
-    4.验证这笔交易的签名是否合法。
-    5.如果这笔交易不是来自本地并且这笔交易的gas小于当前交易池中的gas，则拒绝这笔交易。
-    6.当前用户的nonce如果大于这笔交易的nonce，则拒绝这笔交易。
-    7.当前用户的余额是否充足，如果不充足则拒绝该笔交易。
-    8.验证这笔交易的固有花费，如果小于交易池的gas，则拒绝该笔交易。
-以上就是在进行交易验证时所需验证的参数。这一系列的验证操作结束后，回到addTx的第二步。
-会判断replace。如果replace是false，则会执行promoteExecutables方法。
+validateTx会验证一笔交易的以下几个特性：<br>
+    1.首先验证这笔交易的大小，如果大于32kb则拒绝这笔交易，这样主要是为了防止DDOS攻击。<br>
+    2.接着验证转账金额。如果金额小于0则拒绝这笔交易。<br>
+    3.这笔交易的gas不能超过交易池的gas上限。<br>
+    4.验证这笔交易的签名是否合法。<br>
+    5.如果这笔交易不是来自本地并且这笔交易的gas小于当前交易池中的gas，则拒绝这笔交易。<br>
+    6.当前用户的nonce如果大于这笔交易的nonce，则拒绝这笔交易。<br>
+    7.当前用户的余额是否充足，如果不充足则拒绝该笔交易。<br>
+    8.验证这笔交易的固有花费，如果小于交易池的gas，则拒绝该笔交易。<br>
+以上就是在进行交易验证时所需验证的参数。这一系列的验证操作结束后，回到addTx的第二步。<br>
+会判断replace。如果replace是false，则会执行promoteExecutables方法。<br>
 promoteExecutables会将所有可处理的交易放入pending区，并移除所有非法的交易。
 ```
 // promoteExecutables moves transactions that have become processable from the
@@ -565,9 +565,9 @@ promoteExecutables会将所有可处理的交易放入pending区，并移除所�
         }
     }
 ```
-这个方法首先会迭代所有当前账户的交易，检查当前交易的nonce。如果nonce太低，则删除该笔交易。（list.Forward方法）
-接下来检查余额不足或者gas不足的交易并删除。（list.Filter方法）
-然后将剩余的交易状态更新为pending并放在pending集合中。然后将当前消息池该用户的nonce值+1，接着广播TxPreEvent事件，告诉他们本地有一笔新的合法交易等待处理。（pool.promoteTx方法）
-最终将通过handler.txBroadcastLoop 广播给其它节点，然后在整个以太坊网络上传播并被其它节点接收，等待验证。
- 接着检查消息池的pending列表是否超过容量，如果超过将进行扩容操作。如果一个账户进行的状态超过限制，从交易池中删除最先添加的交易。
+这个方法首先会迭代所有当前账户的交易，检查当前交易的nonce。如果nonce太低，则删除该笔交易。（list.Forward方法）<br>
+接下来检查余额不足或者gas不足的交易并删除。（list.Filter方法）<br>
+然后将剩余的交易状态更新为pending并放在pending集合中。然后将当前消息池该用户的nonce值+1，接着广播TxPreEvent事件，告诉他们本地有一笔新的合法交易等待处理。（pool.promoteTx方法）<br>
+最终将通过handler.txBroadcastLoop 广播给其它节点，然后在整个以太坊网络上传播并被其它节点接收，等待验证。<br>
+ 接着检查消息池的pending列表是否超过容量，如果超过将进行扩容操作。如果一个账户进行的状态超过限制，从交易池中删除最先添加的交易。<br>
 至此，发送交易就结束了。此时交易池中的交易等待挖矿打包处理。
