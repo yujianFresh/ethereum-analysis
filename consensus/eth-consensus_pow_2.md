@@ -51,8 +51,7 @@ func (ethash *Ethash) VerifyHeader(chain consensus.ChainReader, header *types.He
 
 ```
 
-###### 首先看第一个if,它的逻辑判断是如果为true,那么就关闭所有的共识规则校验,紧跟着两个if判断是只要该block的header的hash和number或者上一个header的hash
-###### 和number存在链上,那么它header的共识规则校验就通过,如果都不通过,那么该区块校验失败跑出错误.如果走到最后一个return,那么就需要做一些其他额外验证
+###### 首先看第一个if,它的逻辑判断是如果为true,那么就关闭所有的共识规则校验,紧跟着两个if判断是只要该block的header的hash和number或者上一个header的hash和number存在链上,那么它header的共识规则校验就通过,如果都不通过,那么该区块校验失败跑出错误.如果走到最后一个return,那么就需要做一些其他额外验证
 
 ```
 // verifyHeader checks whether a header conforms to the consensus rules of the
@@ -122,10 +121,7 @@ func (ethash *Ethash) verifyHeader(chain consensus.ChainReader, header, parent *
 }
 
 ```
-###### 该方法回去校验该区块头中的extra数据是不是比约定的参数最大值还大,如果超过,则返回错误,其次会去判断该区块是不是一个uncle区块,如果header的时间戳不符合规则则返回错误,
-###### 然后根据链的配置,header的时间戳以及上一个区块计算中本次区块期待的难度,如果header的难度和期待的不一致,或header的gasLimit比最大数字还大,或已用的gas超过gasLimit,则返回错误.如果
-###### gasLimit超过预定的最大值或最小值,或header的number减去上一个block的header的number不为1,则返回错误.`seal`为true,则会去校验该区块是否符合pow的工作量证明的要求(`verifySeal`方法),因为私有链一般是不需要pow.
-###### 最后两个if是去判断区块是否具有正确的hash,防止用户在不同的链上,以及校验块头的额外数据字段是否符合DAO硬叉规则
+###### 该方法回去校验该区块头中的extra数据是不是比约定的参数最大值还大,如果超过,则返回错误,其次会去判断该区块是不是一个uncle区块,如果header的时间戳不符合规则则返回错误,然后根据链的配置,header的时间戳以及上一个区块计算中本次区块期待的难度,如果header的难度和期待的不一致,或header的gasLimit比最大数字还大,或已用的gas超过gasLimit,则返回错误.如果gasLimit超过预定的最大值或最小值,或header的number减去上一个block的header的number不为1,则返回错误.`seal`为true,则会去校验该区块是否符合pow的工作量证明的要求(`verifySeal`方法),因为私有链一般是不需要pow.最后两个if是去判断区块是否具有正确的hash,防止用户在不同的链上,以及校验块头的额外数据字段是否符合DAO硬叉规则
 
 ###### uncle block:
 __eth允许旷工在挖到一个块的同时包含一组uncle block列表,主要有两个作用:__
@@ -151,8 +147,7 @@ func CalcDifficulty(config *params.ChainConfig, time uint64, parent *types.Heade
 	}
 }
 ```
-###### 该方法的第一个`case`是根据拜占庭规则去计算新块应该具有的难度,第二个`case`是根据宅基地规则去计算新块应该具有的难度,
-###### 第三个`case`是根据边界规则去计算难度
+###### 该方法的第一个`case`是根据拜占庭规则去计算新块应该具有的难度,第二个`case`是根据宅基地规则去计算新块应该具有的难度,第三个`case`是根据边界规则去计算难度
 
 
 #### pow计算生成新块代码解析
@@ -287,8 +282,7 @@ func (ethash *Ethash) mine(block *types.Block, id int, seed uint64, abort chan s
 
 ```
 
-###### `target`是目标新块的难度,`hashimotoFull`方法计算出一个hash值,如果产生的`hash`值小于等于`target`的值,则hash难度符合要求,
-###### 将符合要求的`header`写入到`found channel`中,并返回,否则一直循环
+###### `target`是目标新块的难度,`hashimotoFull`方法计算出一个hash值,如果产生的`hash`值小于等于`target`的值,则hash难度符合要求,将符合要求的`header`写入到`found channel`中,并返回,否则一直循环
 
 ```
 // hashimotoFull aggregates data from the full dataset (using the full in-memory
@@ -349,8 +343,7 @@ func hashimoto(hash []byte, nonce uint64, size uint64, lookup func(index uint32)
 
 ```
 
-###### 可以看到,该方法是不断的进行sha256的hash运算,然后返回进行hash值难度的对比,
-如果hash的十六进制大小小于等于预定的难度,那么这个hash就是符合产块要求的
+###### 可以看到,该方法是不断的进行sha256的hash运算,然后返回进行hash值难度的对比,如果hash的十六进制大小小于等于预定的难度,那么这个hash就是符合产块要求的
 
 
 ###### 参考资料
