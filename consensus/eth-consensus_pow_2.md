@@ -121,7 +121,7 @@ func (ethash *Ethash) verifyHeader(chain consensus.ChainReader, header, parent *
 }
 
 ```
-###### 该方法回去校验该区块头中的extra数据是不是比约定的参数最大值还大,如果超过,则返回错误,其次会去判断该区块是不是一个uncle区块,如果header的时间戳不符合规则则返回错误,然后根据链的配置,header的时间戳以及上一个区块计算中本次区块期待的难度,如果header的难度和期待的不一致,或header的gasLimit比最大数字还大,或已用的gas超过gasLimit,则返回错误.如果gasLimit超过预定的最大值或最小值,或header的number减去上一个block的header的number不为1,则返回错误.`seal`为true,则会去校验该区块是否符合pow的工作量证明的要求(`verifySeal`方法),因为私有链一般是不需要pow.最后两个if是去判断区块是否具有正确的hash,防止用户在不同的链上,以及校验块头的额外数据字段是否符合DAO硬叉规则
+###### 该方法会去校验该区块头中的extra数据是不是比约定的参数最大值还大,如果超过,则返回错误,其次会去判断该区块是不是一个uncle区块,如果header的时间戳不符合规则则返回错误,然后根据链的配置,header的时间戳以及上一个区块计算中本次区块期待的难度,如果header的难度和期待的不一致,或header的gasLimit比最大数字还大,或已用的gas超过gasLimit,则返回错误.如果gasLimit超过预定的最大值或最小值,或header的number减去上一个block的header的number不为1,则返回错误.`seal`为true,则会去校验该区块是否符合pow的工作量证明的要求(`verifySeal`方法),因为私有链一般是不需要pow.最后两个if是去判断区块是否具有正确的hash,防止用户在不同的链上,以及校验块头的额外数据字段是否符合DAO硬叉规则
 
 ###### uncle block:
 __eth允许旷工在挖到一个块的同时包含一组uncle block列表,主要有两个作用:__
