@@ -152,6 +152,7 @@ __/p2psim__
 
   ```
   > * disconnect
+
     ```
        function:节点断开连接
        args:<node> <peer>
@@ -162,7 +163,8 @@ __/p2psim__
 
     ```
   > * stop
-    ```
+
+     ```
        function:停止一个节点
        args:<node>
        demo: node stop node2
@@ -170,8 +172,9 @@ __/p2psim__
        success_result_demo:
          Stopped node2
 
-    ```
+     ```
    > * rpc
+
       ```
          function:调用rpc接口
          args:<node> <method> [<args>] [--subscribe]
@@ -180,7 +183,7 @@ __/p2psim__
          success_result_demo:
           　// TODO
 
-      ```
+       ```
 
 ##### 参考资料
   * __[P2Psim分析笔记(7)-RPC机制](http://www.cto800.com/view/39301865167033790007.html)__
