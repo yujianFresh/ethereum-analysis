@@ -895,6 +895,95 @@ out:
 可以看到接收到这个`StartEvent`就会通知所有的代理，调用`stop`停止当前相同块的挖矿,`remote_Agent`中的`stop`方法
 
 
+最后再看一下新块如何广播给其他节点的,处理的方法在`/eth/handle.go/BroadcastBlock`
+
+```
+func (pm *ProtocolManager) BroadcastBlock(block *types.Block, propagate bool) {
+	hash := block.Hash()
+	peers := pm.peers.PeersWithoutBlock(hash)
+
+	// If propagation is requested, send to a subset of the peer
+	if propagate {
+		// Calculate the TD of the block (it's not imported yet, so block.Td is not valid)
+		var td *big.Int
+		if parent := pm.blockchain.GetBlock(block.ParentHash(), block.NumberU64()-1); parent != nil {
+			td = new(big.Int).Add(block.Difficulty(), pm.blockchain.GetTd(block.ParentHash(), block.NumberU64()-1))
+		} else {
+			log.Error("Propagating dangling block", "number", block.Number(), "hash", hash)
+			return
+		}
+		// Send the block to a subset of our peers
+		transfer := peers[:int(math.Sqrt(float64(len(peers))))]
+		for _, peer := range transfer {
+			peer.SendNewBlock(block, td)
+		}
+		log.Trace("Propagated block", "hash", hash, "recipients", len(transfer), "duration", common.PrettyDuration(time.Since(block.ReceivedAt)))
+		return
+	}
+	// Otherwise if the block is indeed in out own chain, announce it
+	if pm.blockchain.HasBlock(hash, block.NumberU64()) {
+		for _, peer := range peers {
+			peer.SendNewBlockHashes([]common.Hash{hash}, []uint64{block.NumberU64()})
+		}
+		log.Trace("Announced block", "hash", hash, "recipients", len(peers), "duration", common.PrettyDuration(time.Since(block.ReceivedAt)))
+	}
+}
+
+```
+
+
+可以看到该方法中循环每个连接的peer节点,调用`peer.SendNewBlock`发送产块消息过去
+
+```
+func (p *peer) SendNewBlock(block *types.Block, td *big.Int) error {
+	p.knownBlocks.Add(block.Hash())
+	return p2p.Send(p.rw, NewBlockMsg, []interface{}{block, td})
+}
+
+```
+
+```
+func Send(w MsgWriter, msgcode uint64, data interface{}) error {
+	size, r, err := rlp.EncodeToReader(data)
+	if err != nil {
+		return err
+	}
+	return w.WriteMsg(Msg{Code: msgcode, Size: uint32(size), Payload: r})
+}
+
+```
+
+可以看到通过`writeMsg`写入该节点里,该方法的实现是`rw *netWrapper) WriteMsg(msg Msg)`
+
+```
+func (rw *netWrapper) WriteMsg(msg Msg) error {
+	rw.wmu.Lock()
+	defer rw.wmu.Unlock()
+	rw.conn.SetWriteDeadline(time.Now().Add(rw.wtimeout))
+	return rw.wrapped.WriteMsg(msg)
+}
+
+```
+
+该方法设置了一个超时时间,底层调用了net.go的`Write(b []byte) (n int, err error)`,通过网络写给对应的节点了,然后接收端的方法为`ReadMsg`
+
+```
+func (pm *ProtocolManager) handleMsg(p *peer) error {
+	// Read the next message from the remote peer, and ensure it's fully consumed
+	msg, err := p.rw.ReadMsg()
+	if err != nil {
+		return err
+	}
+	if msg.Size > ProtocolMaxMsgSize {
+		return errResp(ErrMsgTooLarge, "%v > %v", msg.Size, ProtocolMaxMsgSize)
+	}
+	defer msg.Discard()
+
+
+```
+
+可以看到在这边读取网络写入来的消息,然后根据不同的`msgCode`作不同的处理,由于`handleMsg`是在一个死循环中调用的,所以就能一直接收到节点广播过来的消息
+
 
 
 
