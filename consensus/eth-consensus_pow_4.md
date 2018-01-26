@@ -984,6 +984,48 @@ func (pm *ProtocolManager) handleMsg(p *peer) error {
 
 可以看到在这边读取网络写入来的消息,然后根据不同的`msgCode`作不同的处理,由于`handleMsg`是在一个死循环中调用的,所以就能一直接收到节点广播过来的消息
 
+```
+//eth/handler.go
+func (pm *ProtocolManager) handle(p *peer) error {
+    td, head, genesis := pm.blockchain.Status()
+    p.Handshake(pm.networkId, td, head, genesis)
+
+    if rw, ok := p.rw.(*meteredMsgReadWriter); ok {
+        rm.Init(p.version)
+    }
+
+    pm.peers.Register(p)
+    defer pm.removePeer(p.id)
+
+    pm.downloader.RegisterPeer(p.id, p.version, p)
+
+    pm.syncTransactions(p)
+    ...
+    for {
+        if err := pm.handleMsg(p); err != nil {
+            return err
+        }
+    }
+}
+
+
+```
+
+handle()函数针对一个新peer做了如下几件事：
+握手，与对方peer沟通己方的区块链状态
+初始化一个读写通道，用以跟对方peer相互数据传输。
+注册对方peer，存入己方peer列表；只有handle()函数退出时，才会将这个peer移除出列表。
+Downloader成员注册这个新peer；Downloader会自己维护一个相邻peer列表。
+调用syncTransactions()，用当前txpool中新累计的tx对象组装成一个txsync{}对象，推送到内部通道txsyncCh。还记得Start()启动的四个函数么?
+其中第四项txsyncLoop()中用以等待txsync{}数据的通道txsyncCh，正是在这里被推入txsync{}的。
+在无限循环中启动handleMsg()，当对方peer发出任何msg时，handleMsg()可以捕捉相应类型的消息并在己方进行处理。
+
+
+#### 参考资料
+
+* [以太坊源代码分析 VI. 基于p2p的底层通信(上篇)](http://blog.csdn.net/teaspring/article/details/78455046)
+
+
 
 
 
