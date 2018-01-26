@@ -349,6 +349,12 @@ func hashimoto(hash []byte, nonce uint64, size uint64, lookup func(index uint32)
 ###### 参考资料
 
  * __[ethereum讨论聊天室](https://gitter.im/ethereum/go-ethereum)__
+ * __[ethereum共识算法解析](http://blog.csdn.net/ddffr/article/details/79073967)__
+ * __[ethereum文章分析](http://blog.csdn.net/teaspring/article/details/78050274)__
+
+
+
+
 
 
 
