@@ -1,4 +1,4 @@
-#EVM分析 临时记录
+#EVM分析
 
 >EVM不能被重用，非线程安全
 
@@ -25,22 +25,8 @@ type Context struct {
 }
 ~~~
 
+> state_processor.Process开始执行交易处理，就是在那里为入口进入到evm的执行的，具体见[core-state-process-analysis.md](core-state-process-analysis.md)
 
-#以太坊虚拟机：
-以太坊虚拟机在交易（Transaction）执行中调用，可以说交易的执行主要由EVM完成。state_processor --> state_transition --> EVM   
-基本步骤：
-~~~
-1) Nonce handling  Nonce 处理
-2) Pre pay gas     预先支付Gas
-3) Create a new state object if the recipient is \0*32 如果接收人是空，那么创建一个新的state object
-4) Value transfer  转账
-== If contract creation ==
-  4a) Attempt to run transaction data 尝试运行输入的数据
-  4b) If valid, use result as code for the new state object 如果有效，那么用运行的结果作为新的state object的code
-== end ==
-5) Run Script section 运行脚本部分
-6) Derive new state root 导出新的state root
-~~~
 
 ##EVM的实现
 以太坊的EVM整个完全是自己实现的，能够直接执行Solidity字节码，没有使用任何第三方运行时。  
